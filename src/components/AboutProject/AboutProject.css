@@ -1,0 +1,156 @@
+.about-project {
+    padding: 110px 70px;
+}
+
+.about-project__title {
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    letter-spacing: -0.04em;
+    margin: 0 0 70px;
+    padding-bottom: 23px;
+    border-bottom: 1px solid #DADADA;
+}
+
+.about-project__container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 110px;
+    list-style: none;
+}
+
+.about-project__description {
+    max-width: 550px;
+}
+
+.about-project__description-title {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    margin: 0;
+    margin-bottom: 26px;
+}
+
+.about-project__description-text {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+}
+
+.about-project__daration {
+    display: flex;
+    text-align: center;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.about-project__daration-backend {
+    width: 20%;
+}
+
+.about-project__daration-frontend {
+    width: 80%;
+}
+
+.about-project__daration-title {
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 14px;
+    padding: 9px 0;
+    background: #3DDC84;
+    color: #000;
+}
+
+.about-project__daration-title_type_gray {
+    background: #303030;
+    color: #FFF;
+}
+
+.about-project__daration-description {
+    font-weight: 500;
+    color: #8B8B8B;
+    margin: 0;
+}
+
+@media screen and (max-width: 800px) {
+    .about-project {
+        padding: 90px 50px;
+    }
+
+    .about-project__container {
+        gap: 30px;
+        margin-bottom: 93px;
+
+    }
+
+    .about-project__description-title {
+        margin-bottom: 22px;
+    }
+
+    .about-project__description-text {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .about-project__daration-backend {
+        width: 21%;
+    }
+    
+    .about-project__daration-frontend {
+        width: 79%;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .about-project {
+        padding: 70px 18px;
+    }
+
+    .about-project__title {
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 60px;
+        padding-bottom: 28px;
+    }
+
+    .about-project__container {
+        flex-direction: column;
+        gap: 56px;
+        margin-bottom: 60px;
+    }
+
+    .about-project__description-title {
+        font-size: 18px;
+        line-height: 22px;
+        margin-bottom: 16px;
+    }
+
+    .about-project__description-text {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .about-project__daration {
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .about-project__daration-backend {
+        width: 36%;
+    }
+    
+    .about-project__daration-frontend {
+        width: 64%;
+    }
+
+    .about-project__daration-title {
+        margin-bottom: 10px;
+        padding-top: 11px;
+        padding-bottom: 11px;
+    }
+}

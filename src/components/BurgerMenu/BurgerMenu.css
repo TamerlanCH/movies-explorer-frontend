@@ -1,0 +1,121 @@
+.burger-button {
+  all: unset;
+  width: 28px;
+  height: 23px;
+  background: url(../../images/burger.svg) center / contain no-repeat;
+  transition: all 0.2s linear;
+}
+
+.burger-button:hover {
+  opacity: .8;
+}
+
+.burger-overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background-color: rgba(0, 0, 0, .3);
+}
+
+.burger-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 520px;
+  background-color: #202020;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 53px;
+}
+
+.burger-container_open {
+  transform: translateX(0);
+}
+
+.burger-container__close-button {
+  all: unset;
+  width: 44px;
+  height: 44px;
+  background: url('../../images/icon-close.svg') no-repeat center;
+  cursor: pointer;
+  justify-self: end;
+  margin: 16px 16px 0 0;
+}
+
+.burger-container__close-button:hover {
+  opacity: .8;
+}
+
+.burger-menu {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-rows: 11% 76% 13%;
+  width: 100%;
+}
+
+.burger-menu__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  align-self: start;
+  grid-row: 2/3;
+  padding: 0;
+  margin: 0;
+}
+
+.burger-menu__item {
+  list-style: none;
+}
+
+.burger-menu__link {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  position: relative;
+  color: #FFF;
+}
+
+.burger-menu__link_active {
+  padding-bottom: 4px;
+  border-bottom: 2px solid #FFF;
+}
+
+.profile-link_type_burger {
+  justify-self: center;
+  align-self: start;
+  grid-row: 3/-1;
+}
+
+@media screen and (max-width: 450px) {
+  .burger-button {
+    width: 22px;
+    height: 21px;
+  }
+
+  .burger-container {
+    width: 320px;
+    grid-template-rows: 57px;
+  }
+
+  .burger-container__close-button {
+    margin-top: 8px;
+    margin-right: 8px;
+  }
+
+  .burger-menu {
+    grid-template-rows: 12% 77% 10%;
+  }
+
+  .burger-menu__list {
+    gap: 24px;
+  }
+}
