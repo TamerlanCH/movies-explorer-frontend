@@ -1,0 +1,117 @@
+.profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 74px 0 70px;
+}
+
+.profile {
+    max-width: 410px;
+}
+
+.profile__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    margin: 0 0 123px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-form__label {
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    padding-bottom: 16px;
+    display: flex;
+    margin: auto 0;
+    border-bottom: 1px solid #424242;
+}
+
+.profile-form__label:last-of-type {
+    margin-top: 17px;
+    border-bottom: none;
+}
+
+.profile-form__input {
+    background: unset;
+    color: #FFF;
+    border: none;
+    padding: 0;
+    text-align: right;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    outline: none;
+    width: 100%;
+    max-height: 27px;
+}
+
+.profile-form__input-error {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    position: absolute;
+    max-width: 410px;
+    margin: 16px 0 0;
+}
+
+.profile-form__button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 16px;
+    display: block;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.profile-form__button-edit {
+    font-weight: 400;
+    margin-top: 204px;
+    color: #FFF;
+    transition: all 0.2s linear;
+}
+
+.profile-form__button-edit:hover {
+    opacity: 0.7;
+}
+
+.profile-form__button-signout {
+    font-weight: 500;
+    color: #EE3465;
+    margin-top: 16px;
+    transition: all 0.2s linear;
+}
+
+.profile-form__button-signout:hover {
+    opacity: 0.7;
+}
+@media screen and (max-width: 800px) {
+    .profile__title {
+        margin-bottom: 96px;
+    }
+
+    .profile-form__button-edit {
+        margin-top: 194px;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .profile {
+        max-width: 260px;
+    }
+
+    .profile__title {
+        margin-bottom: 80px;
+    }
+
+    .profile-form__button-edit {
+        margin-top: 363px;
+    }
+}
