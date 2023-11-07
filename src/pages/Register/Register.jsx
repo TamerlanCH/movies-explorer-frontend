@@ -1,53 +1,77 @@
-import { Link } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Link, useNavigate } from "react-router-dom";
 import './Register.css';
+import { useFormAndValidation } from '../../hooks/useFormAndValidation';
+import { useEffect } from "react";
+import { validateEmail } from '../../utils/validation';
 
-const Register = () => {
+const Register = ({ onRegister, isLoggedIn, apiErrors }) => {
+    const { values, handleChange, errors, isValid } = useFormAndValidation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/movies');
+        }
+    }, [isLoggedIn]);
+
+    const handlerSubmitRegister = (e) => {
+        e.preventDefault();
+        onRegister(values);
+    };
+
     return (
         <main className="auth-page">
             <section className="auth">
                 <Link to="/" className="auth__logo" />
                 <h1 className="auth__title">Добро пожаловать!</h1>
-                <form className="auth-form">
+                <form onSubmit={handlerSubmitRegister}
+                    className="auth-form">
                     <label className="auth-form__label">Имя</label>
                     <input
                         className="auth-form__input"
                         type="text"
                         name="name"
                         placeholder="Введите имя"
-                        // value={values.name || ''}
+                        value={values.name || ''}
+                        onChange={handleChange}
                         minLength="2"
                         maxLength="30"
                         required
                     />
-                    <span className="auth-form__input-error"></span>
-                    <label className="auth-form__label">E-mail</label>
+                    <span className="auth-form__input-error">{errors.name}</span>
+                    <label htmlFor="regEmail" className="auth-form__label">E-mail</label>
                     <input
                         className="auth-form__input"
                         type="email"
                         name="email"
                         placeholder="Введите почту"
-                        // value={values.name || ''}
-                        minLength="2"
-                        maxLength="30"
+                        value={values.email || ''}
+                        onChange={handleChange}
                         required
                     />
-                    <span className="auth-form__input-error"></span>
+                    <span className="auth-form__input-error">{validateEmail(values.email).message}</span>
                     <label className="auth-form__label">Пароль</label>
                     <input
                         className="auth-form__input"
                         type="password"
                         name="password"
                         placeholder="Введите пароль"
-                        // value={values.name || ''}
+                        value={values.password || ''}
+                        onChange={handleChange}
                         minLength="2"
                         maxLength="30"
                         required
                     />
-                    <span className="auth-form__input-error">Что-то пошло не так...</span>
+                    <span className="auth-form__input-error">{errors.password}</span>
+                    <span className="auth-form__input-error">{apiErrors.register.errorText}</span>
                     <button
                         type="submit"
                         className="auth-form__submit"
-                    // disabled={!isValid}
+                        disabled={
+                            !isValid ||
+                            validateEmail(values.email).invalid
+                          }
                     >
                         Зарегистрироваться
                     </button>

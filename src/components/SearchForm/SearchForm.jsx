@@ -1,25 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './SearchForm.css';
 import Search from '../../images/search-btn.svg';
 
+const SearchForm = ({ onFilter, searchQuery }) => {
+    const isChecked = JSON.parse(localStorage.getItem('filterCheckBox'));
+    const [isShortFilmChecked, setIsShortFilmChecked] = useState(isChecked);
+    const [searchText, setSearchText] = useState('');
+    const [error, setError] = useState('');
 
-const SearchForm = () => {
-    const [value, setValue] = useState('');
-    const [shortFilmsToggle, setShortFilmsToggle] = useState(false);
+    useEffect(() => {
+        if (searchQuery.searchText) {
+            setSearchText(searchQuery.searchText);
+        }
+    }, [searchQuery.searchText]);
+
+    useEffect(() => {
+        setIsShortFilmChecked(searchQuery.isShortFilmChecked || false);
+    }, [searchQuery.isShortFilmChecked]);
+
+    const checkFilterBox = () => {
+        const newIsShortFilmChecked = !isShortFilmChecked;
+        setIsShortFilmChecked(newIsShortFilmChecked);
+        localStorage.setItem('filterCheckBox', JSON.stringify(newIsShortFilmChecked));
+
+        onFilter({
+            searchText: searchText,
+            isShortFilmChecked: newIsShortFilmChecked
+        });
+    };
 
     const onSubmit = (e) => {
         e.preventDefault();
-        setValue('');
-        console.log('submit');
-    };
-
-    const onToggle = () => {
-        setShortFilmsToggle(v => !v)
+        if (searchText.trim() === '') {
+            setError('Нужно ввести ключевое слово');
+        } else {
+            setError('');
+            onFilter({ searchText, isShortFilmChecked });
+        }
     };
 
     return (
         <section className="search">
-            <form className='search-form' onSubmit={onSubmit}>
+            <form className='search-form' onSubmit={onSubmit} noValidate>
                 <div className='search-form__inner'>
                     <input
                         type='text'
@@ -29,30 +51,31 @@ const SearchForm = () => {
                         minLength='3'
                         maxLength='300'
                         className='search-form__input'
-                        value={value}
-                        onChange={(e) => setValue(e.target.value)}
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value.toLowerCase())}
                     />
                     <button
                         type='submit'
                         className='search-form__button'
                     >
                         <img
-                        className="search-form__button-img"
-                        src={Search}
-                        alt="Ссылка на внешний сайт" />
+                            className="search-form__button-img"
+                            src={Search}
+                            alt="Ссылка на внешний сайт" />
                     </button>
                 </div>
+                {error && <p className="search-form__error">{error}</p>}
                 <div className='search-form__toggle'>
+                    <input
+                        className='search-form__toggle-checkbox-invisible'
+                        type='checkbox'
+                        name='short-films'
+                        id='short-films'
+                        onChange={checkFilterBox}
+                        checked={isShortFilmChecked}
+                    />
                     <label className='search-form__toggle-label' htmlFor='short-films'>
-                        <input
-                            className='search-form__toggle-checkbox-invisible'
-                            type='checkbox'
-                            name='short-films'
-                            id='short-films'
-                            checked={shortFilmsToggle}
-                            onChange={onToggle}
-                        />
-                        <span className={`search-form__toggle-checkbox-visible ${shortFilmsToggle && 'search-form__toggle-checkbox-visible_checked'}`} />
+                        <span className={`search-form__toggle-checkbox-visible ${isShortFilmChecked && 'search-form__toggle-checkbox-visible_checked'}`} />
                         Короткометражки
                     </label>
                 </div>
