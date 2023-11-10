@@ -2,11 +2,11 @@ import './Profile.css';
 import { useContext, useEffect, useState } from 'react';
 import { useFormAndValidation } from '../../hooks/useFormAndValidation';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
-import { validateEmail } from '../../utils/validation';
+import { validateEmail, validateName } from '../../utils/validation';
 
 const Profile = ({ onSignOut, onUpdateUser, apiErrors }) => {
     const { currentUser } = useContext(CurrentUserContext);
-    const { values, handleChange, errors, isValid, setValues } =
+    const { values, handleChange, isValid, setValues } =
         useFormAndValidation();
     const [isProfileSaved, setIsProfileSaved] = useState(false);
     const [isProfileChanged, setIsProfileChanged] = useState(false);
@@ -19,9 +19,9 @@ const Profile = ({ onSignOut, onUpdateUser, apiErrors }) => {
 
     useEffect(() => {
         setIsProfileChanged(
-          currentUser.name !== values.name || currentUser.email !== values.email
+            currentUser.name !== values.name || currentUser.email !== values.email
         );
-      }, [currentUser, values]);    
+    }, [currentUser, values]);
 
     const handleSumbitSetUserInfo = (e) => {
         e.preventDefault();
@@ -48,7 +48,7 @@ const Profile = ({ onSignOut, onUpdateUser, apiErrors }) => {
                             required
                         />
                     </label>
-                    <span className="profile-form__input-error">{errors.name}</span>
+                    <span className="profile-form__input-error">{validateName(values.name).message}</span>
                     <label className="profile-form__label">
                         Email
                         <input
@@ -78,7 +78,8 @@ const Profile = ({ onSignOut, onUpdateUser, apiErrors }) => {
                             </span>
                         )}
                         <button
-                            disabled={!isValid || !isProfileChanged || validateEmail(values.email).invalid}
+                            disabled={!isValid || !isProfileChanged || validateEmail(values.email).invalid ||
+                                validateName(values.name).invalid}
                             className="profile-form__button profile-form__button-edit"
                         >
                             Редактировать

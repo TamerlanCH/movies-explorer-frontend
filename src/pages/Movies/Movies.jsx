@@ -3,15 +3,14 @@ import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
 import Preloader from "../../components/Preloader/Preloader";
 import './Movies.css';
 import { useEffect, useState } from "react";
-import { moviesApi } from '../../utils/MoviesApi';
 
-const Movies = ({ savedMovies, onLikeMovie }) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [movies, setMovies] = useState([]);
+
+const Movies = ({ movies, savedMovies, onLikeMovie }) => {
     const [filteredMovies, setFilteredMovies] = useState([]);
     const searchedMovies = localStorage.getItem('searchedMovies');
     const queries = localStorage.getItem('searchQueryMovies');
     const [searchQuery, setSearchQuery] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (searchedMovies) {
@@ -20,39 +19,49 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
     }, [searchedMovies]);
 
     useEffect(() => {
-        setTimeout(() => setIsLoading(false), 2000);
-
-        moviesApi.getMovies().then((data) => {
-            setMovies(data);
-        });
-    }, []);
-
-    useEffect(() => {
         if (queries) {
             setSearchQuery(JSON.parse(queries));
         }
     }, [queries]);
 
     const filterMovies = (query) => {
-        localStorage.setItem('searchQueryMovies', JSON.stringify(query));
-
-        let filtered = [];
-        if (query.isShortFilmChecked) {
-            filtered = movies.filter((m) => {
-                return (
-                    m.duration <= 40 &&
-                    m.nameRU.toLowerCase().trim().includes(query.searchText)
-                );
-            });
-            setFilteredMovies(filtered);
-            localStorage.setItem('searchedMovies', JSON.stringify(filtered));
-        } else if (!query.isShortFilmChecked) {
-            filtered = movies.filter((m) => {
-                return m.nameRU.toLowerCase().trim().includes(query.searchText);
-            });
-            setFilteredMovies(filtered);
-            localStorage.setItem('searchedMovies', JSON.stringify(filtered));
+        if (!filteredMovies.length) {
+            setIsLoading(true);
         }
+
+        setTimeout(
+            () => {
+                let filtered = [];
+                localStorage.setItem('searchQueryMovies', JSON.stringify(query));
+
+                if (query.isShortFilmChecked) {
+                    filtered = movies.filter((m) => {
+                        return (
+                            m.duration <= 40 &&
+                            m.nameRU
+                                .toLowerCase()
+                                .trim()
+                                .includes(query.searchText.toLowerCase())
+                        );
+                    });
+
+                    setFilteredMovies(filtered);
+                    localStorage.setItem('searchedMovies', JSON.stringify(filtered));
+                } else if (!query.isShortFilmChecked) {
+                    filtered = movies.filter((m) => {
+                        return m.nameRU
+                            .toLowerCase()
+                            .trim()
+                            .includes(query.searchText.toLowerCase());
+                    });
+
+                    setFilteredMovies(filtered);
+                    localStorage.setItem('searchedMovies', JSON.stringify(filtered));
+                }
+                setIsLoading(false)
+            },
+            filteredMovies.length ? 0 : 300
+        );
     };
 
     const handleResetInput = () => {
@@ -64,11 +73,13 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
 
     return (
         <main className="movies-page">
+
             <SearchForm
                 onFilter={filterMovies}
                 searchQuery={searchQuery}
                 onResetInput={handleResetInput}
             />
+
             {isLoading ? <Preloader /> : (
                 <>
                     {filteredMovies.length ? (

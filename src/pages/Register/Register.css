@@ -85,6 +85,13 @@
     opacity: 0.8;
 }
 
+.auth-form__submit:disabled {
+    background-color: transparent;
+    outline: 1px solid #8b8b8b;
+    color: #8b8b8b;
+    opacity: .5;
+}
+
 .auth__subtitle {
     font-weight: 400;
     font-size: 14px;

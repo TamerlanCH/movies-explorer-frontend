@@ -1,11 +1,10 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
-// import { useLocation } from 'react-router-dom';
 import useResize from '../../hooks/useResize.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const MoviesCardList = ({ movies, savedMovies, onLikeMovie, onDeleteMovie }) => {
+const MoviesCardList = ({ movies, savedMovies, onLikeMovie, onDeleteMovie, isSavedMoviesPage }) => {
   let size = useResize();
   const [moviesToAdd, setMoviesToAdd] = useState(0);
   const location = useLocation();
@@ -15,6 +14,9 @@ const MoviesCardList = ({ movies, savedMovies, onLikeMovie, onDeleteMovie }) => 
   }, [movies]);
 
   const moviesToRender = useMemo(() => {
+    if (isSavedMoviesPage) {
+      return movies;
+    }
     let countToRender = 12;
     
     if (size.width < 1280) {
@@ -26,9 +28,8 @@ const MoviesCardList = ({ movies, savedMovies, onLikeMovie, onDeleteMovie }) => 
     }
     
     return movies.slice(0, countToRender + moviesToAdd);
-  }, [movies, moviesToAdd, size]);
+  }, [movies, moviesToAdd, size, isSavedMoviesPage]);  
   
-
   return (
     <section className="movies">
       <ul className="movies-list">

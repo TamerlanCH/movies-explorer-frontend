@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
 import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
 import SearchForm from "../../components/SearchForm/SearchForm";
-import Preloader from "../../components/Preloader/Preloader";
 import './SavedMovies.css';
 
 const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        setTimeout(() => setIsLoading(false), 2000);
-    }, []);
-
     const [filteredMovies, setFilteredMovies] = useState([]);
     const searchedMovies = localStorage.getItem('searchedSavedMovies');
-    const queries = localStorage.getItem('searchQuerySavedMovies');
     const [searchQuery, setSearchQuery] = useState({});
 
     useEffect(() => {
@@ -22,18 +14,9 @@ const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
         } else {
             setFilteredMovies(savedMovies);
         }
-    }, [searchedMovies, savedMovies, searchQuery]);
-
-    useEffect(() => {
-        if (queries) {
-            setSearchQuery(JSON.parse(queries));
-        } else {
-            setSearchQuery({ ...queries, searchText: '' });
-        }
-    }, [queries, savedMovies]);
+    }, [searchedMovies, savedMovies]);
 
     const filterMovies = (query) => {
-        localStorage.setItem('searchQuerySavedMovies', JSON.stringify(query));
 
         let filtered = [];
         if (query.isShortFilmChecked) {
@@ -58,7 +41,6 @@ const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
         setFilteredMovies(savedMovies);
         setSearchQuery({});
         localStorage.removeItem('searchedSavedMovies');
-        localStorage.removeItem('searchQuerySavedMovies');
     };
 
     return (
@@ -68,13 +50,16 @@ const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
                 searchQuery={searchQuery}
                 onResetInput={handleResetInput}
             />
-            {isLoading ? <Preloader /> : (
-                <>
-                    <MoviesCardList movies={filteredMovies} onDeleteMovie={onDeleteMovie} />
-                </>
+            {filteredMovies.length ? (
+                <MoviesCardList movies={filteredMovies} onDeleteMovie={onDeleteMovie} />
+            ) : (
+                searchedMovies && (
+                    <p className="movies__not-found">
+                        По вашему запросу ничего не найдено
+                    </p>
+                )
             )}
         </main>
     )
 }
-
 export default SavedMovies;

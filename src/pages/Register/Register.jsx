@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import './Register.css';
 import { useFormAndValidation } from '../../hooks/useFormAndValidation';
 import { useEffect } from "react";
-import { validateEmail } from '../../utils/validation';
+import { validateEmail, validateName } from '../../utils/validation';
 
 const Register = ({ onRegister, isLoggedIn, apiErrors }) => {
     const { values, handleChange, errors, isValid } = useFormAndValidation();
@@ -39,7 +39,7 @@ const Register = ({ onRegister, isLoggedIn, apiErrors }) => {
                         maxLength="30"
                         required
                     />
-                    <span className="auth-form__input-error">{errors.name}</span>
+                    <span className="auth-form__input-error">{validateName(values.name).message}</span>
                     <label htmlFor="regEmail" className="auth-form__label">E-mail</label>
                     <input
                         className="auth-form__input"
@@ -70,8 +70,9 @@ const Register = ({ onRegister, isLoggedIn, apiErrors }) => {
                         className="auth-form__submit"
                         disabled={
                             !isValid ||
-                            validateEmail(values.email).invalid
-                          }
+                            validateEmail(values.email).invalid ||
+                            validateName(values.name).invalid
+                        }
                     >
                         Зарегистрироваться
                     </button>
