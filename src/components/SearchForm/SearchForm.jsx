@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './SearchForm.css';
 import Search from '../../images/search-btn.svg';
 
-const SearchForm = ({ onFilter, searchQuery }) => {
+const SearchForm = ({ onFilter, searchQuery, filteredMovies }) => {
     const isChecked = JSON.parse(localStorage.getItem('filterCheckBox'));
     const [isShortFilmChecked, setIsShortFilmChecked] = useState(isChecked);
     const [searchText, setSearchText] = useState('');
@@ -23,10 +23,10 @@ const SearchForm = ({ onFilter, searchQuery }) => {
         setIsShortFilmChecked(newIsShortFilmChecked);
         localStorage.setItem('filterCheckBox', JSON.stringify(newIsShortFilmChecked));
 
-        onFilter({
-            searchText: searchText,
-            isShortFilmChecked: newIsShortFilmChecked
-        });
+        if (filteredMovies.length > 0) {
+            onFilter({ searchText, isShortFilmChecked: newIsShortFilmChecked });
+          }
+        
     };
 
     const onSubmit = (e) => {

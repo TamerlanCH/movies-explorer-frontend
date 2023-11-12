@@ -27,20 +27,20 @@ const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
                 );
             });
             setFilteredMovies(filtered);
-            localStorage.setItem('searchedSavedMovies', JSON.stringify(filtered));
+            // localStorage.setItem('searchedSavedMovies', JSON.stringify(filtered));
         } else if (!query.isShortFilmChecked) {
             filtered = savedMovies.filter((m) => {
                 return m.nameRU.toLowerCase().trim().includes(query.searchText.toLowerCase());
             });
             setFilteredMovies(filtered);
-            localStorage.setItem('searchedSavedMovies', JSON.stringify(filtered));
+            // localStorage.setItem('searchedSavedMovies', JSON.stringify(filtered));
         }
     };
 
     const handleResetInput = () => {
         setFilteredMovies(savedMovies);
         setSearchQuery({});
-        localStorage.removeItem('searchedSavedMovies');
+        // localStorage.removeItem('searchedSavedMovies');
     };
 
     return (
@@ -49,9 +49,10 @@ const SavedMovies = ({ savedMovies, onDeleteMovie }) => {
                 onFilter={filterMovies}
                 searchQuery={searchQuery}
                 onResetInput={handleResetInput}
+                filteredMovies={filteredMovies}
             />
             {filteredMovies.length ? (
-                <MoviesCardList movies={filteredMovies} onDeleteMovie={onDeleteMovie} />
+                <MoviesCardList movies={filteredMovies} onDeleteMovie={onDeleteMovie} isSavedMoviesPage={true}/>
             ) : (
                 searchedMovies && (
                     <p className="movies__not-found">

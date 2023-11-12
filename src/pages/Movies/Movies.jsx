@@ -78,6 +78,7 @@ const Movies = ({ movies, savedMovies, onLikeMovie }) => {
                 onFilter={filterMovies}
                 searchQuery={searchQuery}
                 onResetInput={handleResetInput}
+                filteredMovies={filteredMovies}
             />
 
             {isLoading ? <Preloader /> : (
