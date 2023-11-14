@@ -2,15 +2,23 @@ import SearchForm from "../../components/SearchForm/SearchForm";
 import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
 import Preloader from "../../components/Preloader/Preloader";
 import './Movies.css';
+
 import { useEffect, useState } from "react";
+import { moviesApi } from '../../utils/MoviesApi';
 
-
-const Movies = ({ movies, savedMovies, onLikeMovie }) => {
+const Movies = ({ savedMovies, onLikeMovie }) => {
     const [filteredMovies, setFilteredMovies] = useState([]);
     const searchedMovies = localStorage.getItem('searchedMovies');
     const queries = localStorage.getItem('searchQueryMovies');
     const [searchQuery, setSearchQuery] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        moviesApi.getMovies().then((movies) => {
+            setMovies(movies);
+        });
+    }, []);
 
     useEffect(() => {
         if (searchedMovies) {

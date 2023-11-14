@@ -15,7 +15,7 @@ import SavedMovies from '../../pages/SavedMovies/SavedMovies';
 import MainApi from '../../utils/MainApi';
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import { auth } from '../../utils/Auth';
-import { moviesApi } from '../../utils/MoviesApi';
+// import { moviesApi } from '../../utils/MoviesApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 const App = () => {
@@ -28,7 +28,7 @@ const App = () => {
   const footerPaths = ['/', '/movies', '/saved-movies'];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [movies, setMovies] = useState([]);
+  // const [movies, setMovies] = useState([]);
   const [apiErrors, setApiErrors] = useState({
     login: {},
     register: {},
@@ -43,12 +43,6 @@ const App = () => {
       authorization: `Bearer ${localStorage.getItem('jwt')}`
     }
   });
-
-  useEffect(() => {
-    moviesApi.getMovies().then((movies) => {
-      setMovies(movies);
-    });
-  }, []);
 
   useEffect(() => {
     setApiErrors({
@@ -91,21 +85,21 @@ const App = () => {
       });
   }, [isLoggedIn]);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      if (localStorage.getItem('movies')) {
-        setMovies(JSON.parse(localStorage.getItem('movies')));
-      } else {
-        moviesApi
-          .getMovies()
-          .then((movies) => {
-            localStorage.setItem('movies', JSON.stringify(movies));
-            setMovies(JSON.parse(localStorage.getItem('movies')));
-          })
-          .catch((err) => console.log(err));
-      }
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     if (localStorage.getItem('movies')) {
+  //       setMovies(JSON.parse(localStorage.getItem('movies')));
+  //     } else {
+  //       moviesApi
+  //         .getMovies()
+  //         .then((movies) => {
+  //           localStorage.setItem('movies', JSON.stringify(movies));
+  //           setMovies(JSON.parse(localStorage.getItem('movies')));
+  //         })
+  //         .catch((err) => console.log(err));
+  //     }
+  //   }
+  // }, [isLoggedIn]);
 
   useEffect(() => {
     isLoggedIn &&
@@ -208,7 +202,7 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/signup" element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} apiErrors={apiErrors} />} />
           <Route path="/signin" element={<Login onLogin={handleLogin} isLoggedIn={isLoggedIn} apiErrors={apiErrors} />} />
-          <Route path="/movies" element={<ProtectedRoute element={Movies} isLoggedIn={isLoggedIn} movies={movies} savedMovies={savedMovies} onLikeMovie={handleLikeMovie} />} />
+          <Route path="/movies" element={<ProtectedRoute element={Movies} isLoggedIn={isLoggedIn} savedMovies={savedMovies} onLikeMovie={handleLikeMovie} />} />
           <Route path="/saved-movies" element={<ProtectedRoute element={SavedMovies} isLoggedIn={isLoggedIn} savedMovies={savedMovies} onDeleteMovie={handleDeleteMovie} />} />
           <Route path="/profile" element={<ProtectedRoute element={Profile} isLoggedIn={isLoggedIn} apiErrors={apiErrors} onSignOut={handleSignOut} onUpdateUser={handleUpdateUser} />} />
           <Route path="*" element={<NotFound isLoggedIn={isLoggedIn} />} />
