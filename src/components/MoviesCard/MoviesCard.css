@@ -17,6 +17,10 @@
     font-size: 13px;
     line-height: normal;
     margin: 0;
+    max-width: 250px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .moviescard__duration {
@@ -76,11 +80,17 @@
     opacity: .8;
 }
 
+.moviescard__image-container {
+    display: flex;
+    margin: auto;
+}
+
 .moviescard__image {
     transition: all 0.16s linear;
     object-fit: cover;
     cursor: pointer;
     height: 201px;
+    max-width: 360px;
 }
 
 .moviescard__image:hover {
@@ -99,6 +109,11 @@
         display: flex;
         justify-content: space-between;
     }
+
+    .moviescard__image {
+        max-width: 339px;
+        height: 190px;
+    }
 }
 
 @media screen and (max-width: 440px) {
@@ -109,7 +124,7 @@
     }
 
     .moviescard__image {
-        width: 300px;
+        max-width: 300px;
         height: 168px;
     }
 
@@ -118,6 +133,7 @@
     }
 
     .moviescard__name {
+        max-width: 240px;
         font-size: 12px;
     }
 

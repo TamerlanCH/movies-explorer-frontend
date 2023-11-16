@@ -2,26 +2,91 @@ import SearchForm from "../../components/SearchForm/SearchForm";
 import MoviesCardList from "../../components/MoviesCardList/MoviesCardList";
 import Preloader from "../../components/Preloader/Preloader";
 import './Movies.css';
-import { useEffect, useState } from "react";
 
-const Movies = () => {
-    const [isLoading, setIsLoading] = useState(true);
+import { useEffect, useState } from "react";
+import { moviesApi } from '../../utils/MoviesApi';
+
+const Movies = ({ savedMovies, onLikeMovie }) => {
+    const [filteredMovies, setFilteredMovies] = useState([]);
+    const searchedMovies = localStorage.getItem('searchedMovies');
+    const queries = localStorage.getItem('searchQueryMovies');
+    const [searchQuery, setSearchQuery] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => setIsLoading(false), 2000);
-    }, []);
+        if (searchedMovies) {
+            setFilteredMovies(JSON.parse(searchedMovies));
+        }
+    }, [searchedMovies]);
+
+    useEffect(() => {
+        if (queries) {
+            setSearchQuery(JSON.parse(queries));
+        }
+    }, [queries]);
+
+    const filterMovies = (query) => {
+        setIsLoading(true);
+        moviesApi.getMovies().then((movies) => {
+            let filtered = [];
+            localStorage.setItem('searchQueryMovies', JSON.stringify(query));
+            if (query.isShortFilmChecked) {
+                filtered = movies.filter((m) => {
+                    return (
+                        m.duration <= 40 &&
+                        m.nameRU.toLowerCase().trim().includes(query.searchText.toLowerCase())
+                    );
+                });
+            } else {
+                filtered = movies.filter((m) => {
+                    return m.nameRU.toLowerCase().trim().includes(query.searchText.toLowerCase());
+                });
+            }
+            setFilteredMovies(filtered);
+            localStorage.setItem('searchedMovies', JSON.stringify(filtered));
+            setIsLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            setIsLoading(false);
+        });
+    };
+      
+    const handleResetInput = () => {
+        setFilteredMovies([]);
+        setSearchQuery({});
+        localStorage.removeItem('searchedMovies');
+        localStorage.removeItem('searchQueryMovies');
+    };
 
     return (
         <main className="movies-page">
-            <SearchForm />
-            {isLoading ? <Preloader /> : (
+
+            <SearchForm
+                onFilter={filterMovies}
+                searchQuery={searchQuery}
+                onResetInput={handleResetInput}
+                filteredMovies={filteredMovies}
+            />
+            {isLoading ? (
+                <Preloader />
+            ) : (
                 <>
-                    <MoviesCardList />
-                    <button className="movies__more-btn">Ещё</button>
+                    {filteredMovies.length ? (
+                        <MoviesCardList
+                            movies={filteredMovies}
+                            savedMovies={savedMovies}
+                            onLikeMovie={onLikeMovie}
+                        />
+                    ) : (
+                        searchedMovies && (
+                            <p className="movies__not-found">По вашему запросу ничего не найдено</p>
+                        )
+                    )}
                 </>
             )}
         </main>
-    )
-}
+    );
+};
 
 export default Movies;
+

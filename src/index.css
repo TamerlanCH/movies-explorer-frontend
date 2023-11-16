@@ -3,6 +3,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: #202020;
 }
 
 input:-webkit-autofill,

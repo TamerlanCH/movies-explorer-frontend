@@ -5,6 +5,7 @@
 }
 
 .movies__more-btn {
+    display: block;
     padding: 11px 0 9px;
     margin: 76px auto 80px;
     max-width: 320px;
