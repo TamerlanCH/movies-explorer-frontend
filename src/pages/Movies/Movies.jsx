@@ -12,13 +12,6 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
     const queries = localStorage.getItem('searchQueryMovies');
     const [searchQuery, setSearchQuery] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [movies, setMovies] = useState([]);
-
-    useEffect(() => {
-        moviesApi.getMovies().then((movies) => {
-            setMovies(movies);
-        });
-    }, []);
 
     useEffect(() => {
         if (searchedMovies) {
@@ -33,45 +26,31 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
     }, [queries]);
 
     const filterMovies = (query) => {
-        if (!filteredMovies.length) {
-            setIsLoading(true);
-        }
-
-        setTimeout(
-            () => {
-                let filtered = [];
-                localStorage.setItem('searchQueryMovies', JSON.stringify(query));
-
-                if (query.isShortFilmChecked) {
-                    filtered = movies.filter((m) => {
-                        return (
-                            m.duration <= 40 &&
-                            m.nameRU
-                                .toLowerCase()
-                                .trim()
-                                .includes(query.searchText.toLowerCase())
-                        );
-                    });
-
-                    setFilteredMovies(filtered);
-                    localStorage.setItem('searchedMovies', JSON.stringify(filtered));
-                } else if (!query.isShortFilmChecked) {
-                    filtered = movies.filter((m) => {
-                        return m.nameRU
-                            .toLowerCase()
-                            .trim()
-                            .includes(query.searchText.toLowerCase());
-                    });
-
-                    setFilteredMovies(filtered);
-                    localStorage.setItem('searchedMovies', JSON.stringify(filtered));
-                }
-                setIsLoading(false)
-            },
-            filteredMovies.length ? 0 : 300
-        );
+        setIsLoading(true);
+        moviesApi.getMovies().then((movies) => {
+            let filtered = [];
+            localStorage.setItem('searchQueryMovies', JSON.stringify(query));
+            if (query.isShortFilmChecked) {
+                filtered = movies.filter((m) => {
+                    return (
+                        m.duration <= 40 &&
+                        m.nameRU.toLowerCase().trim().includes(query.searchText.toLowerCase())
+                    );
+                });
+            } else {
+                filtered = movies.filter((m) => {
+                    return m.nameRU.toLowerCase().trim().includes(query.searchText.toLowerCase());
+                });
+            }
+            setFilteredMovies(filtered);
+            localStorage.setItem('searchedMovies', JSON.stringify(filtered));
+            setIsLoading(false);
+        }).catch((error) => {
+            console.log(error);
+            setIsLoading(false);
+        });
     };
-
+      
     const handleResetInput = () => {
         setFilteredMovies([]);
         setSearchQuery({});
@@ -88,8 +67,9 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
                 onResetInput={handleResetInput}
                 filteredMovies={filteredMovies}
             />
-
-            {isLoading ? <Preloader /> : (
+            {isLoading ? (
+                <Preloader />
+            ) : (
                 <>
                     {filteredMovies.length ? (
                         <MoviesCardList
@@ -99,15 +79,14 @@ const Movies = ({ savedMovies, onLikeMovie }) => {
                         />
                     ) : (
                         searchedMovies && (
-                            <p className="movies__not-found">
-                                По вашему запросу ничего не найдено
-                            </p>
+                            <p className="movies__not-found">По вашему запросу ничего не найдено</p>
                         )
                     )}
                 </>
             )}
         </main>
-    )
-}
+    );
+};
 
 export default Movies;
+
